@@ -1,0 +1,26 @@
+{
+  "name": "foss4gnor2018",
+  "version": "1.0.0",
+  "description": "FOSS4G-NOR 2018 presentation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "./node_modules/http-server/bin/http-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/haraldkj/foss4gnor2018.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/haraldkj/foss4gnor2018/issues"
+  },
+  "homepage": "https://github.com/haraldkj/foss4gnor2018#readme",
+  "devDependencies": {
+    "http-server": "^0.11.1"
+  },
+  "dependencies": {
+    "reveal.js": "^3.7.0"
+  }
+}
