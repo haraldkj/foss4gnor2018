@@ -1,0 +1,103 @@
+<html>
+  <head>
+  </head>
+  <body>
+    <style>
+    .graticule {
+  fill: none;
+  stroke: #777;
+  stroke-width: .5px;
+  stroke-opacity: .5;
+}
+    </style>
+  <script src="./lib/d3/d3.js"></script>
+  <script>
+  function drawJson(id, json, projection) {
+    var json, map,
+      path, vis, xy,
+      duration, offset, origin_x, origin_y, len, group, circle;
+    var width = 400;
+    var height = 500;
+    // Draw a GeoJSON line on the map:
+    map = document.getElementById(id);
+    var width = map.clientWidth;
+    var height = map.clientHeight;
+
+    xy = projection;
+    path = d3.geoPath().projection(xy);
+
+    vis = d3.select("#" + id)
+      .append("svg:svg")
+      .attr("width", width)
+      .attr("height", height);
+
+    var svg = vis.append("svg:g")
+      .attr("class", "route")
+      .selectAll("path")
+      .data(json.features)
+      .enter();
+
+    var line = svg.append("svg:path")
+      .attr("d", path)
+      .attr("fill-opacity", 0.0)
+      .attr("fill", "#fff")
+      .attr("stroke", "none");
+
+      // Draw a red circle on the map:
+
+    group = vis.append("svg:g");
+    //const targetPath = d3.selectAll(".route")[0][0];
+    //const pathNode = d3.select(targetPath).selectAll('path').node();
+    const pathLength = line.node().getTotalLength();
+
+    circle = group.append("circle")
+      .attr("r", 10)
+      .attr("fill", '#00b9f2')
+      .attr("cx", function () {
+          var p = line.node().getPointAtLength(0)
+          return p.x;
+      })
+      .attr("cy", function () {
+          var p = line.node().getPointAtLength(0)
+          return p.y;
+      });
+
+    // Animate the circle:
+    duration = 5000;
+    circle.on("click", function(){
+      line
+        .attr("stroke", "#333")
+        .attr("stroke-dasharray", pathLength + " " + pathLength)
+        .attr("stroke-dashoffset", pathLength)
+        .transition()
+        .duration(duration)
+        .ease(d3.easeLinear)
+        .attr("stroke-dashoffset", 0);
+    circle.transition()
+      .duration(duration)
+      .ease(d3.easeLinear)
+      .attrTween("cx", function (d, i) {
+      return function (t) {
+          var p = line.node().getPointAtLength(pathLength*t);
+          return p.x;
+      }})
+      .attrTween("cy", function (d, i) {
+      return function (t) {
+          var p = line.node().getPointAtLength(pathLength*t);
+          return p.y;
+      }})
+    })
+  }
+
+  d3.json("./data/baaten_linestring.json", (error, json) => {
+    var width = map.clientWidth;
+    var height = map.clientHeight;
+    const proj = d3.geoMercator().fitExtent([[25, 25],[width - 25, height - 25]], json);
+    drawJson('map', json, proj);
+  })
+
+  </script>
+
+  <div id="map" style="width: 100%; height: 100%"></div>
+  </body>
+</html>
