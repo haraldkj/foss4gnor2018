@@ -51,10 +51,18 @@
 						<img src="./res/img/slowtv-collage.jpg" />
 					</section>
 					<section>
-						<img src="./res/img/./res/img/tracking/tracking_rein_gompi.jpg" />
+						<img src="./res/img/tracking/tracking_rein_gompi.jpg" />
 					</section>
 					<section>
 						<img src="./res/img/tracking/tracking_nansen.jpg" />
+					</section>
+					<section
+						data-background-iframe="http://localhost:8080/static/geojson_anim/track-nansen.html"
+						data-background-interactive>
+						<div class="fragment">
+							<img style="height: 80%; margin: 2%" src="./res/img/tracking/tracking_nansen.jpg" />
+							<div style="text-align: right; font-size: 12px; margin-right: 2%">Foto: NRK</div>
+						</div>
 					</section>
         </section>
 				<!--
@@ -455,7 +463,7 @@
 			// - https://github.com/hakimel/reveal.js#dependencies
 			Reveal.initialize({
 				autoPlayMedia: true,
-				slideNumber: true,
+				//slideNumber: true,
 				dependencies: [
 					{ src: '../node_modules/reveal.js/plugin/markdown/marked.js' },
 					{ src: '../node_modules/reveal.js/plugin/markdown/markdown.js' },
