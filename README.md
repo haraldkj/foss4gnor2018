@@ -1,6 +1,6 @@
 # foss4gnor2018
 
-The presentation "Journalistikk og kartdata hos en almennkringkaster".
+The presentation "Journalistikk og kartdata hos en allmennkringkaster".
 
 ## Installation
 
