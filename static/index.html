@@ -1,468 +1,566 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
 
-		<title>Journalistikk og kartdata hos en allmennkringkaster</title>
+    <title>Journalistikk og kartdata hos en allmennkringkaster</title>
 
-		<link rel="stylesheet" href="../node_modules/reveal.js/css/reveal.css">
-		<!-- <link rel="stylesheet" href="../node_modules/reveal.js/css/theme/beige.css"> -->
-    <link rel="stylesheet" href="./css/nrk-reveal.css">
+    <link rel="stylesheet" href="../node_modules/reveal.js/css/reveal.css" />
+    <!--
+      <link rel="stylesheet" href="../node_modules/reveal.js/css/theme/beige.css">
+    -->
+    <link rel="stylesheet" href="./css/nrk-reveal.css" />
 
-		<!-- Theme used for syntax highlighting of code -->
-		<link rel="stylesheet" href="../node_modules/reveal.js/lib/css/zenburn.css">
+    <!-- Theme used for syntax highlighting of code -->
+    <link
+      rel="stylesheet"
+      href="../node_modules/reveal.js/lib/css/zenburn.css"
+    />
 
-		<!-- Printing and PDF exports -->
-		<script>
-			var link = document.createElement( 'link' );
-			link.rel = 'stylesheet';
-			link.type = 'text/css';
-			link.href = window.location.search.match( /print-pdf/gi ) ? '../node_modules/reveal.js/css/print/pdf.css' : '../node_modules/reveal.js/css/print/paper.css';
-			document.getElementsByTagName( 'head' )[0].appendChild( link );
-		</script>
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<section>
-					<h1>Hva er kart i NRK?</h1>
-				</section>
-				<section>
-        	<ol>
-          	<p>Kartografi</p>
-						<p>Journalistikk</p>
-          	<p>Visualisering</p>
-        	</ol>
-				</section>
-				<section>
-					<div style="display: flex;">
-						<span><img src="./res/img/enkelt-kart-evakueringssone-steinkjer.PNG" /></span>
-						<span><img src="./res/img/flomsone-200-hamar.PNG" /></span>
-						<span><img src="./res/img/terrain/terrain-saltstraumen-ngu1m2.png" /></span>
-					</div>
-				</section>
-				<section>
-						<img src="./res/img/journalistikk/byeskille-kartinteresse.png" />
-				</section>
-         <!-- SLOW TV? -->
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.type = "text/css";
+      link.href = window.location.search.match(/print-pdf/gi)
+        ? "../node_modules/reveal.js/css/print/pdf.css"
+        : "../node_modules/reveal.js/css/print/paper.css";
+      document.getElementsByTagName("head")[0].appendChild(link);
+    </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
         <section>
-          <img src="./res/img/slowtv-birds.jpg" />
+          <h1>Journalistikk og kartdata hos en allmennkringkaster</h1>
         </section>
-				<section>
-					<img src="./res/img/slowtv-collage.jpg" />
-				</section>
-				<section
-					data-background-iframe="http://localhost:8080/static/geojson_anim/track-sommerbaten.html"
-					data-background-interactive>
-					<div class="fragment">
-						<img style="width: 100%; float: left; margin: 2%" src="./res/img/tracking/tracking_sommerbaten_thomas_hellum_nrk.jpg" />
-						<div style="text-align: right; font-size: 12px; margin-right: 2%">Foto: Thomas Hellum / NRK</div>
-				</div>
-				</section>
-				<section
-					data-background-iframe="http://localhost:8080/static/geojson_anim/track-rein.html"
-					data-background-interactive>
-					<div style="height: 70%" class="fragment">
-						<img src="./res/img/tracking/tracking_rein_gompi.jpg" />
-						<div style="text-align: right; font-size: 12px; margin-right: 2%">Foto: Sindre Skrede / NRK</div>
-				</div>
-				</section>
-				<section>
-					<div class="stretch">
-						<img src="./res/img/tracking/tracking-rein.jpg" />
-					</div>
-				</section>
-				<section>
-					<div class="stretch">
-						<img src="./res/img/tracking/tracking-kartoteket.png" />
-					</div>
-				</section>
-				<section>
-					<div class="stretch">
-						<img src="./res/img/tracking/tracking-rein-hovedside.jpg" />
-					</div>
-				</section>
-				<section
-					data-background-iframe="http://localhost:8080/static/geojson_anim/track-nansen.html"
-					data-background-interactive>
-					<div class="fragment">
-						<img style="height: 80%; margin: 2%" src="./res/img/tracking/tracking_nansen.jpg" />
-						<div style="text-align: right; font-size: 12px; margin-right: 2%">Foto: NRK</div>
-					</div>
-				</section>
-				<section>
-					<div class="stretch">
-						<img src="./res/img/tracking/nansen_mercator_1.png" />
-					</div>
-				</section>
-				<section>
-					<div class="stretch">
-						<img src="./res/img/tracking/nansen_mercator_2.png" />
-					</div>
-				</section>
-				<section>
-					<video class="stretch" controls>
-						<source src="./res/img/tracking/nansen_kart.mov" type="video/mp4">
-					</video>
-				</section>
-				<!--
-				<section>
-					<div>
-							<img style="width: 240px; height: 240px; box-shadow: 30px; border: 2px solid black; border-radius: 240px" src="./res/img/hkj_bw.jpg" />
-							<h6>Harald K. Jansson</h6>
-							<img style="width: 240px; height: 240px;box-shadow: 30px; border: 2px solid black; border-radius: 240px" src="./res/img/byeskille-nrk-bylinephoto.jpg" />
-							<h6>Øyvind Bye Skille</h6>
-					</div>
-				</section>
-			-->
+        <section>
+          <ol>
+            <p>Kartografi</p>
+            <p>Journalistikk</p>
+            <p>Visualisering</p>
+          </ol>
+        </section>
+        <section>
+          <div style="display: flex;">
+            <span
+              ><img src="./res/img/enkelt-kart-evakueringssone-steinkjer.PNG"
+            /></span>
+            <span><img src="./res/img/flomsone-200-hamar.PNG"/></span>
+            <span
+              ><img src="./res/img/terrain/terrain-saltstraumen-ngu1m2.png"
+            /></span>
+          </div>
+        </section>
+        <section>
+          <img src="./res/img/journalistikk/byeskille-kartinteresse.png" />
+        </section>
+        <!-- SLOW TV? -->
+        <section><img src="./res/img/slowtv-birds.jpg" /></section>
+        <section><img src="./res/img/slowtv-collage.jpg" /></section>
+        <section
+          data-background-iframe="http://localhost:8080/static/geojson_anim/track-sommerbaten.html"
+          data-background-interactive
+        >
+          <div class="fragment">
+            <img
+              style="width: 100%; float: left; margin: 2%"
+              src="./res/img/tracking/tracking_sommerbaten_thomas_hellum_nrk.jpg"
+            />
+            <div style="text-align: right; font-size: 12px; margin-right: 2%">
+              Foto: Thomas Hellum / NRK
+            </div>
+          </div>
+        </section>
+        <section
+          data-background-iframe="http://localhost:8080/static/geojson_anim/track-rein.html"
+          data-background-interactive
+        >
+          <div style="height: 70%" class="fragment">
+            <img src="./res/img/tracking/tracking_rein_gompi.jpg" />
+            <div style="text-align: right; font-size: 12px; margin-right: 2%">
+              Foto: Sindre Skrede / NRK
+            </div>
+          </div>
+        </section>
+        <section>
+          <div class="stretch">
+            <img src="./res/img/tracking/tracking-rein.jpg" />
+          </div>
+        </section>
+        <section>
+          <div class="stretch">
+            <img src="./res/img/tracking/tracking-kartoteket.png" />
+          </div>
+        </section>
+        <section>
+          <div class="stretch">
+            <img src="./res/img/tracking/tracking-rein-hovedside.jpg" />
+          </div>
+        </section>
+        <section
+          data-background-iframe="http://localhost:8080/static/geojson_anim/track-nansen.html"
+          data-background-interactive
+        >
+          <div class="fragment">
+            <img
+              style="height: 80%; margin: 2%"
+              src="./res/img/tracking/tracking_nansen.jpg"
+            />
+            <div style="text-align: right; font-size: 12px; margin-right: 2%">
+              Foto: NRK
+            </div>
+          </div>
+        </section>
+        <section>
+          <div class="stretch">
+            <img src="./res/img/tracking/nansen_mercator_1.png" />
+          </div>
+        </section>
+        <section>
+          <div class="stretch">
+            <img src="./res/img/tracking/nansen_mercator_2.png" />
+          </div>
+        </section>
+        <section>
+          <video class="stretch" controls>
+            <source src="./res/img/tracking/nansen_kart.mov" type="video/mp4" />
+          </video>
+        </section>
+        <!--
+          <section>
+          	<div>
+          			<img style="width: 240px; height: 240px; box-shadow: 30px; border: 2px solid black; border-radius: 240px" src="./res/img/hkj_bw.jpg" />
+          			<h6>Harald K. Jansson</h6>
+          			<img style="width: 240px; height: 240px;box-shadow: 30px; border: 2px solid black; border-radius: 240px" src="./res/img/byeskille-nrk-bylinephoto.jpg" />
+          			<h6>Øyvind Bye Skille</h6>
+          	</div>
+          </section>
+        -->
         <section>
           <h2><b>Kartografi</b></h2>
         </section>
-				<section>
-					<img src="./res/img/cartography/cartography-nrk-topo1.png" />
-				</section>
-				<section>
-					<div class="stretch">
-						<img src="./res/img/cartography/monsen-kart1.png" />
-					</div>
-				</section>
-				<section>
-					<img class="stretch" src="./res/img/cartography/monsen-kart2.png" />
-				</section>
-				<section>
-					<img class="stretch" src="./res/img/cartography/monsen-kart3.png" />
-				</section>
-				<!--
-				<section>
-					<img class="stretch" src="./res/img/cartography/monsen-kart4.png" />
-				</section>
-			-->
-				<section>
-					<img class="stretch" src="./res/img/cartography/cartography-sommertoget.png" />
-				</section>
-				<section>
-					<video class="stretch" controls>
-						<source src="./res/img/cartography/cartography-drommeturen-vid.mov" type="video/mp4">
-					</video>
-				</section>
-				<section>
-					<div>
-						<img style="border: 0px; box-shadow: none" src="./res/img/cartography/yr-logo.png" />
-					</div>
-				</section>
-				<section>
-					<div class="stretch">
-						<img src="./res/img/cartography/radar_new.png" />
-					</div>
-				</section>
-				<section>
-					<div class="stretch">
-						<img src="./res/img/cartography/yr-polar-natural.png" />
-					</div>
-				</section>
-				<section>
-					<div class="stretch">
-						<img src="./res/img/cartography/lambert.png" />
-					</div>
-				</section>
-				<section>
-					<div class="stretch">
-						<img src="./res/img/cartography/mercator.png" />
-					</div>
-				</section>
-				<section data-background="./res/img/cartography/p3line-kart.png">
-					<div class="fragment">
-						<img style="border: none; box-shadow: none; background: none;" data-src="./res/img/cartography/p3line.png" />
-					</div>
-				</section>
-				<section>
-					<div class="stretch">
-						<img src="./res/img/tracking/sommermonsen_vignett.png" />
-					</div>
-				</section>
-				<section>
-					<div class="stretch">
-						<img src="./res/img/tracking/sommermonsen_videomiks.png" />
-					</div>
-				</section>
-				<section>
-					<div class="stretch">
-						<img src="./res/img/tracking/sommermonsen_hare.png" />
-					</div>
-				</section>
-				<section>
-					<div class="stretch">
-						<img src="./res/img/tracking/qgis_audun.jpg" />
-					</div>
-				</section>
-				<section>
-					<div class="stretch">
-						<img src="./res/img/tracking/sommermonsen_siktanalyse1.png" />
-					</div>
-				</section>
-				<section>
-					<h2><b>Journalistikk</b></h2>
-				</section>
-				<section>
-					<div class="stretch" style="display:inline-block">
+        <section>
+          <img src="./res/img/cartography/cartography-nrk-topo1.png" />
+        </section>
+        <section>
+          <div class="stretch">
+            <img src="./res/img/cartography/monsen-kart1.png" />
+          </div>
+        </section>
+        <section>
+          <img class="stretch" src="./res/img/cartography/monsen-kart2.png" />
+        </section>
+        <section>
+          <img class="stretch" src="./res/img/cartography/monsen-kart3.png" />
+        </section>
+        <!--
+          <section>
+          	<img class="stretch" src="./res/img/cartography/monsen-kart4.png" />
+          </section>
+        -->
+        <section>
+          <img
+            class="stretch"
+            src="./res/img/cartography/cartography-sommertoget.png"
+          />
+        </section>
+        <section>
+          <video class="stretch" controls>
+            <source
+              src="./res/img/cartography/cartography-drommeturen-vid.mov"
+              type="video/mp4"
+            />
+          </video>
+        </section>
+        <section>
+          <div>
+            <img
+              style="border: 0px; box-shadow: none"
+              src="./res/img/cartography/yr-logo.png"
+            />
+          </div>
+        </section>
+        <section>
+          <div class="stretch">
+            <img src="./res/img/cartography/radar_new.png" />
+          </div>
+        </section>
+        <section>
+          <div class="stretch">
+            <img src="./res/img/cartography/yr-polar-natural.png" />
+          </div>
+        </section>
+        <section>
+          <div class="stretch">
+            <img src="./res/img/cartography/lambert.png" />
+          </div>
+        </section>
+        <section>
+          <div class="stretch">
+            <img src="./res/img/cartography/mercator.png" />
+          </div>
+        </section>
+        <section data-background="./res/img/cartography/p3line-kart.png">
+          <div class="fragment">
+            <img
+              style="border: none; box-shadow: none; background: none;"
+              data-src="./res/img/cartography/p3line.png"
+            />
+          </div>
+        </section>
+        <section>
+          <div class="stretch">
+            <img src="./res/img/tracking/sommermonsen_vignett.png" />
+          </div>
+        </section>
+        <section>
+          <div class="stretch">
+            <img src="./res/img/tracking/sommermonsen_videomiks.png" />
+          </div>
+        </section>
+        <section>
+          <div class="stretch">
+            <img src="./res/img/tracking/sommermonsen_hare.png" />
+          </div>
+        </section>
+        <section>
+          <div class="stretch">
+            <img src="./res/img/tracking/qgis_audun.jpg" />
+          </div>
+        </section>
+        <section>
+          <div class="stretch">
+            <img src="./res/img/tracking/sommermonsen_siktanalyse1.png" />
+          </div>
+        </section>
+        <section>
+          <h2><b>Journalistikk</b></h2>
+        </section>
+        <section>
+          <div class="stretch" style="display:inline-block">
             <img src="./res/img/cartography/lyttestasjon-sak.png" />
             <img src="./res/img/polar-bearbeidet.png" />
           </div>
         </section>
-				<!--
-				<section>
-					<div class="stretch" style="display: flex;">
-						<span><img src="./res/img/cartography/sak-kvakksalver.png" /></span>
-						<span><img src="./res/img/cartography/branham_mørk2_small.png" /></span>
-					</div>
-				</section>
-			-->
-				<section>
-					<div class="stretch" style="display: flex;">
-						<img src="./res/img/cartography/cartography-nordkorea-raketter.png" />
-						<span><img class="fragment" src="./res/img/cartography/tilbakemelding1_edit.png" />
-						<img class="fragment" src="./res/img/cartography/tilbakemelding2_edit.png" /></span>
-					</div>
-				</section>
-				<section>
-					<div class="stretch" style="display: flex;">
-						<img src="./res/img/journalistikk/enkle-kartdata-ringeriksbanen.png" />
-					</div>
-				</section>
-				<!--
-				<section>
-					<video class="stretch" controls>
-						<source src="./res/img/journalistikk/stoysoner-orland-brennpunkt.mp4" type="video/mp4">
-					</video>
-				</section>
-			-->
-				<section>
-					<div class="stretch" style="display: flex;">
-						<img src="./res/img/flomsone-200-hamar.PNG" />
-					</div>
-				</section>
-				<section>
-					<div class="stretch">
-						<img src="./res/img/cartography/sak-bysykler.png" />
-						<img src="./res/img/bysykler-insta-morgenrush-mandag-20-08.gif" />
-					</div>
-				</section>
-				<section>
-					<video class="stretch" controls>
-						<source src="./res/img/journalistikk/skogbranner-sverige2018.mov" type="video/mp4">
-					</video>
-				</section>
-				<section>
-					<div class="stretch" style="display: flex;">
-						<img src="./res/img/journalistikk/skogbranner-sverige-copernicus-ems.PNG" />
-					</div>
-				</section>
-				<section>
-					<div class="stretch" style="display: flex;">
-						<img src="./res/img/journalistikk/skogbranner-sverige-qgis.PNG" />
-					</div>
-				</section>
-				<section>
-						<div class="stretch" style="display: flex;">
-							<img src="./res/img/journalistikk/helge-ingstad-nrk.jpg" />
-						</div>
-				</section>
-				<section>
-						<div class="stretch" style="display: flex;">
-							<img src="./res/img/journalistikk/maaloy-animasjon.gif" />
-						</div>
-				</section>
-					<section>
-					<div class="stretch" style="display: flex;">
-						<img src="./res/img/journalistikk/rekedod-article.png" />
-					</div>
-				</section>
-				<section>
-					<div class="stretch" style="display: flex;">
-						<span><img src="./res/img/journalistikk/rekedod-anlegg-wide.png" /></span>
-						<span><img src="./res/img/journalistikk/rekedod-buffer-circles.png" /></span>
-					</div>
-				</section>
-				<section>
-					<div class="stretch" style="display: flex;">
-						<span><img src="./res/img/journalistikk/radon-article.png" /></span>
-						<span><img src="./res/img/journalistikk/radon-nrkbeta.png" /></span>
-					</div>
-				</section>
-				<section>
-					<div class="stretch">
-						<img src="./res/img/journalistikk/journalistikk-radon-beta-grid.png" />
-					</div>
-				</section>
-				<section>
-					<video class="stretch" controls>
-						<source src="./res/img/journalistikk/radon-dr.mp4" type="video/mp4">
-					</video>
-				</section>
-				<section>
-					<video class="stretch" controls>
-						<source src="./res/img/journalistikk/radon-stange.mov" type="video/mp4">
-					</video>
-				</section>
-				<section>
-					<div class="stretch" style="display:inline-block">
-						<img src="./res/img/cartography/sak-deponier.png" />
-						<img src="./res/img/cartography/sak-deponier-beta.png" />
-					</div>
-				</section>
-				<section>
-					<div class="stretch">
-						<img src="./res/img/cartography/sak-deponier-qgis.png" />
-					</div>
-				</section>
-				<section>
-					<h2><b>Visualisering</b></h2>
-					<div class="stretch">
-						<img src="./res/img/terrain/harran_tex_all.png" />
-					</div>
-				</section>
-				<section data-background="./res/img/terrain/vebjørn_karlsen.jpg">
-				</section>
-				<section>
-					<div class="stretch">
-						<img src="./res/img/terrain/saltstraumen_ngu_wms.png" />
-					</div>
-				</section>
-				<section>
-					<div class="stretch">
-						<span><img src="./res/img/terrain/terrain-saltstraumen-ngu1m2.png" /></span>
-					</div>
-				</section>
-				<section>
-					<div class="stretch">
-						<img src="./res/img/terrain/terrain-saltstraumen-qgis-three.png" />
-					</div>
-				</section>
-				<section>
-					<div class="stretch">
-						<img src="./res/img/terrain/drone_marius.jpg" />
-					</div>
-				</section>
-				<section>
-					<div class="stretch">
-						<img src="./res/img/terrain/terrain-saltstraumen-blender-bygg.png" />
-					</div>
-				</section>
-				<section>
-					<div class="stretch">
-						<img src="./res/img/terrain/saltstraumen_infografikk1.png" />
-					</div>
-				</section>
-				<section>
-					<div class="stretch">
-						<img src="./res/img/terrain/saltstraumen_infografikk2.png" />
-					</div>
-				</section>
-				<section>
-					<video class="stretch" controls>
-						<source src="./res/img/terrain/saltstraumen_kamerakjoring.mp4" type="video/mp4">
-					</video>
-				</section>
-				<section data-background-video-loop="true" data-background-video="./res/img/terrain/terrain-fuglefjellet-videosite.mov">
-				</section>
-				<section>
-					<section data-background-iframe="https://www.nrk.no/fuglefjellet-1.12984757" data-background-interactive>
-					</section>
-					<section data-background-video-loop="true" data-background-video="./res/img/terrain/fuglefjellet-xl-screencast2.mp4">
-					</section>
-				</section>
-				<section>
-					<div class="stretch">
-						<img src="./res/img/terrain/terrain-fuglefjellet-comparison.jpg" />
-					</div>
-				</section>
-				<section>
-					<div class="stretch">
-						<img src="./res/img/terrain/terrain-fuglefjellet-qgis.png" />
-					</div>
-				</section>
-					<section>
-						<div class="stretch">
-							<img src="./res/img/terrain/terrain-fuglefjellet-thalassophobia.png" />
-						</div>
-					</section>
-					<section data-background="./res/img/terrain/sommertoget.jpeg">
-					</section>
-					<section>
-						<div class="stretch">
-							<img src="./res/img/terrain/terrain-sommertoget-perla.jpg" />
-							<div style="text-align: right; font-size: 12px; margin-right: 3%">Foto: Kristoffer Løkke Sørensen / NRK</div>
-						</div>
-					</section>
-					<section>
-						<div class="stretch">
-							<img src="./res/img/terrain/sommertoget_sporingsside.png" />
-						</div>
-					</section>
-					<section>
-						<div class="stretch">
-							<img src="./res/img/terrain/terrain-sommertoget-frontcam.png" />
-						</div>
-					</section>
-					<section>
-						<div class="stretch">
-							<img src="./res/img/terrain/terrain-sommertoget-hoydedatano.png" />
-						</div>
-					</section>
-					<section>
-						<div class="stretch">
-							<img src="./res/img/terrain/terrain-sommertoget-textured-dot.png" />
-						</div>
-					</section>
-					<section>
-						<div class="stretch">
-							<img src="./res/img/terrain/terrain-sommertoget-textured-locations.png" />
-						</div>
-					</section>
-					<section data-background-video-loop="true" data-background-video="./res/img/terrain/sommertoget_ar.mp4">
-					</section>
-				  <section>
-					<div>
-						<div>
-							<h2>Takk!</h2>
-						</div>
-						<div style="float: left">
-							<img style="width: 240px; height: 240px; box-shadow: 30px; border: 2px solid black; border-radius: 240px" src="./res/img/hkj-bw.jpg" />
-							<h6>Harald K. Jansson</h6>
-							<p>harald.k.jansson@nrk.no</p>
-							<p>@janssonius</p>
-						</div>
-						<div style="float: right">
-							<img style="width: 240px; height: 240px;box-shadow: 30px; border: 2px solid black; border-radius: 240px" src="./res/img/byeskille-nrk-bylinephoto.jpg" />
-							<h6>Øyvind Bye Skille</h6>
-							<p>oyvind.bye.skille@nrk.no</p>
-							<p>@byeskille</p>
-						</div>
-					</div>
-				</section>
-			</div>
-		</div>
+        <!--
+          <section>
+          	<div class="stretch" style="display: flex;">
+          		<span><img src="./res/img/cartography/sak-kvakksalver.png" /></span>
+          		<span><img src="./res/img/cartography/branham_mørk2_small.png" /></span>
+          	</div>
+          </section>
+        -->
+        <section>
+          <div class="stretch" style="display: flex;">
+            <img
+              src="./res/img/cartography/cartography-nordkorea-raketter.png"
+            />
+            <span
+              ><img
+                class="fragment"
+                src="./res/img/cartography/tilbakemelding1_edit.png"/>
+              <img
+                class="fragment"
+                src="./res/img/cartography/tilbakemelding2_edit.png"
+            /></span>
+          </div>
+        </section>
+        <section>
+          <div class="stretch" style="display: flex;">
+            <img
+              src="./res/img/journalistikk/enkle-kartdata-ringeriksbanen.png"
+            />
+          </div>
+        </section>
+        <!--
+          <section>
+          	<video class="stretch" controls>
+          		<source src="./res/img/journalistikk/stoysoner-orland-brennpunkt.mp4" type="video/mp4">
+          	</video>
+          </section>
+        -->
+        <section>
+          <div class="stretch" style="display: flex;">
+            <img src="./res/img/flomsone-200-hamar.PNG" />
+          </div>
+        </section>
+        <section>
+          <div class="stretch">
+            <img src="./res/img/cartography/sak-bysykler.png" />
+            <img src="./res/img/bysykler-insta-morgenrush-mandag-20-08.gif" />
+          </div>
+        </section>
+        <section>
+          <video class="stretch" controls>
+            <source
+              src="./res/img/journalistikk/skogbranner-sverige2018.mov"
+              type="video/mp4"
+            />
+          </video>
+        </section>
+        <section>
+          <div class="stretch" style="display: flex;">
+            <img
+              src="./res/img/journalistikk/skogbranner-sverige-copernicus-ems.PNG"
+            />
+          </div>
+        </section>
+        <section>
+          <div class="stretch" style="display: flex;">
+            <img src="./res/img/journalistikk/skogbranner-sverige-qgis.PNG" />
+          </div>
+        </section>
+        <section>
+          <div class="stretch" style="display: flex;">
+            <img src="./res/img/journalistikk/helge-ingstad-nrk.jpg" />
+          </div>
+        </section>
+        <section>
+          <div class="stretch" style="display: flex;">
+            <img src="./res/img/journalistikk/maaloy-animasjon.gif" />
+          </div>
+        </section>
+        <section>
+          <div class="stretch" style="display: flex;">
+            <img src="./res/img/journalistikk/rekedod-article.png" />
+          </div>
+        </section>
+        <section>
+          <div class="stretch" style="display: flex;">
+            <span
+              ><img src="./res/img/journalistikk/rekedod-anlegg-wide.png"
+            /></span>
+            <span
+              ><img src="./res/img/journalistikk/rekedod-buffer-circles.png"
+            /></span>
+          </div>
+        </section>
+        <section>
+          <div class="stretch" style="display: flex;">
+            <span><img src="./res/img/journalistikk/radon-article.png"/></span>
+            <span><img src="./res/img/journalistikk/radon-nrkbeta.png"/></span>
+          </div>
+        </section>
+        <section>
+          <div class="stretch">
+            <img
+              src="./res/img/journalistikk/journalistikk-radon-beta-grid.png"
+            />
+          </div>
+        </section>
+        <section>
+          <video class="stretch" controls>
+            <source
+              src="./res/img/journalistikk/radon-dr.mp4"
+              type="video/mp4"
+            />
+          </video>
+        </section>
+        <section>
+          <video class="stretch" controls>
+            <source
+              src="./res/img/journalistikk/radon-stange.mov"
+              type="video/mp4"
+            />
+          </video>
+        </section>
+        <section>
+          <div class="stretch" style="display:inline-block">
+            <img src="./res/img/cartography/sak-deponier.png" />
+            <img src="./res/img/cartography/sak-deponier-beta.png" />
+          </div>
+        </section>
+        <section>
+          <div class="stretch">
+            <img src="./res/img/cartography/sak-deponier-qgis.png" />
+          </div>
+        </section>
+        <section>
+          <h2><b>Visualisering</b></h2>
+          <div class="stretch">
+            <img src="./res/img/terrain/harran_tex_all.png" />
+          </div>
+        </section>
+        <section
+          data-background="./res/img/terrain/vebjørn_karlsen.jpg"
+        ></section>
+        <section>
+          <div class="stretch">
+            <img src="./res/img/terrain/saltstraumen_ngu_wms.png" />
+          </div>
+        </section>
+        <section>
+          <div class="stretch">
+            <span
+              ><img src="./res/img/terrain/terrain-saltstraumen-ngu1m2.png"
+            /></span>
+          </div>
+        </section>
+        <section>
+          <div class="stretch">
+            <img src="./res/img/terrain/terrain-saltstraumen-qgis-three.png" />
+          </div>
+        </section>
+        <section>
+          <div class="stretch">
+            <img src="./res/img/terrain/drone_marius.jpg" />
+          </div>
+        </section>
+        <section>
+          <div class="stretch">
+            <img
+              src="./res/img/terrain/terrain-saltstraumen-blender-bygg.png"
+            />
+          </div>
+        </section>
+        <section>
+          <div class="stretch">
+            <img src="./res/img/terrain/saltstraumen_infografikk1.png" />
+          </div>
+        </section>
+        <section>
+          <div class="stretch">
+            <img src="./res/img/terrain/saltstraumen_infografikk2.png" />
+          </div>
+        </section>
+        <section>
+          <video class="stretch" controls>
+            <source
+              src="./res/img/terrain/saltstraumen_kamerakjoring.mp4"
+              type="video/mp4"
+            />
+          </video>
+        </section>
+        <section
+          data-background-video-loop="true"
+          data-background-video="./res/img/terrain/terrain-fuglefjellet-videosite.mov"
+        ></section>
+        <section>
+          <section
+            data-background-iframe="https://www.nrk.no/fuglefjellet-1.12984757"
+            data-background-interactive
+          ></section>
+          <section
+            data-background-video-loop="true"
+            data-background-video="./res/img/terrain/fuglefjellet-xl-screencast2.mp4"
+          ></section>
+        </section>
+        <section>
+          <div class="stretch">
+            <img src="./res/img/terrain/terrain-fuglefjellet-comparison.jpg" />
+          </div>
+        </section>
+        <section>
+          <div class="stretch">
+            <img src="./res/img/terrain/terrain-fuglefjellet-qgis.png" />
+          </div>
+        </section>
+        <section>
+          <div class="stretch">
+            <img
+              src="./res/img/terrain/terrain-fuglefjellet-thalassophobia.png"
+            />
+          </div>
+        </section>
+        <section data-background="./res/img/terrain/sommertoget.jpeg"></section>
+        <section>
+          <div class="stretch">
+            <img src="./res/img/terrain/terrain-sommertoget-perla.jpg" />
+            <div style="text-align: right; font-size: 12px; margin-right: 3%">
+              Foto: Kristoffer Løkke Sørensen / NRK
+            </div>
+          </div>
+        </section>
+        <section>
+          <div class="stretch">
+            <img src="./res/img/terrain/sommertoget_sporingsside.png" />
+          </div>
+        </section>
+        <section>
+          <div class="stretch">
+            <img src="./res/img/terrain/terrain-sommertoget-frontcam.png" />
+          </div>
+        </section>
+        <section>
+          <div class="stretch">
+            <img src="./res/img/terrain/terrain-sommertoget-hoydedatano.png" />
+          </div>
+        </section>
+        <section>
+          <div class="stretch">
+            <img src="./res/img/terrain/terrain-sommertoget-textured-dot.png" />
+          </div>
+        </section>
+        <section>
+          <div class="stretch">
+            <img
+              src="./res/img/terrain/terrain-sommertoget-textured-locations.png"
+            />
+          </div>
+        </section>
+        <section
+          data-background-video-loop="true"
+          data-background-video="./res/img/terrain/sommertoget_ar.mp4"
+        ></section>
+        <section>
+          <div>
+            <div><h2>Takk!</h2></div>
+            <div style="float: left">
+              <img
+                style="width: 240px; height: 240px; box-shadow: 30px; border: 2px solid black; border-radius: 240px"
+                src="./res/img/hkj-bw.jpg"
+              />
+              <h6>Harald K. Jansson</h6>
+              <p>harald.k.jansson@nrk.no</p>
+              <p>@janssonius</p>
+            </div>
+            <div style="float: right">
+              <img
+                style="width: 240px; height: 240px;box-shadow: 30px; border: 2px solid black; border-radius: 240px"
+                src="./res/img/byeskille-nrk-bylinephoto.jpg"
+              />
+              <h6>Øyvind Bye Skille</h6>
+              <p>oyvind.bye.skille@nrk.no</p>
+              <p>@byeskille</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
 
-		<script src="../node_modules/reveal.js/lib/js/head.min.js"></script>
-		<script src="../node_modules/reveal.js/js/reveal.js"></script>
+    <script src="../node_modules/reveal.js/lib/js/head.min.js"></script>
+    <script src="../node_modules/reveal.js/js/reveal.js"></script>
 
-		<script>
-			// More info about config & dependencies:
-			// - https://github.com/hakimel/reveal.js#configuration
-			// - https://github.com/hakimel/reveal.js#dependencies
-			Reveal.initialize({
-				autoPlayMedia: true,
-				defaultTiming: 23,
-				slideNumber: true,
-				showSlideNumber: 'speaker',
-				dependencies: [
-					{ src: '../node_modules/reveal.js/plugin/markdown/marked.js' },
-					{ src: '../node_modules/reveal.js/plugin/markdown/markdown.js' },
-					{ src: '../node_modules/reveal.js/plugin/notes/notes.js', async: true },
-					{ src: '../node_modules/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
-				]
-			});
-		</script>
-	</body>
+    <script>
+      // More info about config & dependencies:
+      // - https://github.com/hakimel/reveal.js#configuration
+      // - https://github.com/hakimel/reveal.js#dependencies
+      Reveal.initialize({
+        autoPlayMedia: true,
+        defaultTiming: 23,
+        slideNumber: true,
+        showSlideNumber: "speaker",
+        dependencies: [
+          { src: "../node_modules/reveal.js/plugin/markdown/marked.js" },
+          { src: "../node_modules/reveal.js/plugin/markdown/markdown.js" },
+          {
+            src: "../node_modules/reveal.js/plugin/notes/notes.js",
+            async: true
+          },
+          {
+            src: "../node_modules/reveal.js/plugin/highlight/highlight.js",
+            async: true,
+            callback: function() {
+              hljs.initHighlightingOnLoad();
+            }
+          }
+        ]
+      });
+    </script>
+  </body>
 </html>
