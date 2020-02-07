@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Canvas</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+	#radar { border: 1px solid black; }
+	</style>
+</head>
+<body>
+	<canvas id="radar" width="825" height="1115"></canvas>
+	<script>
+		// shim layer with setTimeout fallback
+		window.requestAnimFrame = (function(){
+		  return  window.requestAnimationFrame       ||
+		          window.webkitRequestAnimationFrame ||
+		          window.mozRequestAnimationFrame    ||
+		          function( callback ){
+		            window.setTimeout(callback, 1000 / 60);
+		          };
+		})();
+
+		var canvas = document.getElementById('radar'),
+			buffer = document.createElement('canvas'),
+			context = canvas.getContext('2d'),
+			bufferContext = buffer.getContext('2d'),
+			width = 825,
+			height = 1115,
+			count = 0,
+			currentAlpha = 1,
+			nextAlpha = 0,
+			image = new Image();
+
+			buffer.width = width;
+			buffer.height = height;
+
+		image.onload = function() {
+			(function animloop(){
+			  requestAnimFrame(animloop);
+			  drawImage();
+			})();
+		};
+
+		function getPosition(count) {
+			var xPos = count % 7,
+				yPos = Math.floor(count / 7),
+				sx = -xPos * width,
+				sy = -yPos * height;
+
+			return {'sx': sx, 'sy': sy} 
+		}
+
+		function drawImage () {
+			bufferContext.clearRect(0, 0, width, height);
+
+			// Current image
+			bufferContext.globalCompositeOperation = 'source-over';
+			var currentPos = getPosition(count);
+			bufferContext.drawImage(image, currentPos.sx, currentPos.sy);
+			// Next image
+			bufferContext.globalCompositeOperation = 'source-in';
+			var nextPos = getPosition(count +1);
+			bufferContext.drawImage(image, nextPos.sx, nextPos.sy);
+
+			context.clearRect(0, 0, width, height);
+			context.drawImage(buffer,0,0);
+
+			// Current image
+			context.globalAlpha = currentAlpha;
+			currentAlpha = currentAlpha - 0.03;
+			var currentPos = getPosition(count);
+			context.drawImage(image, currentPos.sx, currentPos.sy);
+			// Next image
+			context.globalAlpha = nextAlpha;
+			nextAlpha = nextAlpha + 0.03;
+			var nextPos = getPosition(count +1);
+			context.drawImage(image, nextPos.sx, nextPos.sy);
+
+			if(nextAlpha >=1) {
+				currentAlpha = 1;
+				nextAlpha = 0;
+
+				if (++count === 41) {
+					count = 0;
+				}
+			}		 
+		}
+
+		image.src = 'images/combined/2014-10-28T20-45Z.png';
+
+	</script>
+</body>
+</html>

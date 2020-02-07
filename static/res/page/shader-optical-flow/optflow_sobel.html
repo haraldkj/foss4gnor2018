@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <title>Shader Test</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1">
+  <link rel="icon" type="image/png" href="favicon.png"/>
+  <script type="text/javascript" src="./node_modules/glslCanvas/build/GlslCanvas.js"></script>
+ </head>
+ <body style="margin:0;padding:0;overflow:hidden;">
+   <script id="vertexShader" type="x-shader/x-vertex">
+    attribute vec4 a_position;
+    void main(){
+      gl_Position = a_position;
+    }
+   </script>
+   <script id="fragmentShader" type="x-shader/x-fragment">
+     #ifdef GL_ES
+     precision mediump float;
+     precision mediump int;
+     #endif
+
+     #define SUM_RGB(v) ((v).r + (v).g + (v).b)
+     #define AVG_RGB(v) (SUM_RGB(v) / 3.0)
+
+     uniform vec2 u_mouse;
+     uniform float u_time;
+     uniform vec2 u_resolution;
+     uniform sampler2D	tex_curr_frame ; // current  image
+     uniform sampler2D	tex_prev_frame ; // previous image
+     uniform sampler2D	tex_curr_sobelH; // current  gradient horizontal
+     uniform sampler2D	tex_curr_sobelV; // current  gradient vertical
+     uniform sampler2D	tex_prev_sobelH; // previous gradient horizontal
+     uniform sampler2D	tex_prev_sobelV; // previous gradient vertical
+
+     //uniform float scale;               // scale flow
+     //uniform float threshold;     // flow intensity threshold
+
+      void main() {
+
+        float scale = 1.0;
+        float threshold = 0.0;
+        vec2 posn = gl_FragCoord.xy / u_resolution.xy;
+        // dt, dx, dy
+        float dt = texture2D(tex_curr_frame , posn).g - texture2D(tex_prev_frame , posn).g; // dt
+        float dx = texture2D(tex_curr_sobelH, posn).g *8.0 + 0.5+ texture2D(tex_prev_sobelH, posn).g *8.0 + 0.5; // dx_curr + dx_prev
+        float dy = texture2D(tex_curr_sobelV, posn).g  *8.0 + 0.5+ texture2D(tex_prev_sobelV, posn).g *8.0 + 0.5; // dy_curr + dy_prev
+
+        //dt *= 3.0; dx *= 3.0; dy *= 3.0; // to match the rgb range
+
+
+        // gradient length
+        float dd = sqrt(dx*dx + dy*dy + 1.0);
+        // optical flow
+        vec2 flow = scale * vec2(dx, dy) / dd;
+
+        // threshold
+        float len_old = sqrt(flow.x*flow.x + flow.y*flow.y + 0.00001);
+        float len_new = max(len_old - threshold, 0.0);
+        flow = len_new * flow/len_old;
+
+        gl_FragColor = vec4(flow * 0.5 + 0.5, 0.0, 1.0);
+      }
+   </script>
+   <canvas id="glslCanvas" width="1270" height="1614"></canvas>
+   <script>
+    var canvas = document.getElementById("glslCanvas");
+    canvas.style.height = "100%";
+    //canvas.style.width = "100%";
+    var sandbox = new GlslCanvas(canvas);
+
+    var fragShader=document.getElementById('fragmentShader').innerHTML;
+    var vertShader=document.getElementById('vertexShader').innerHTML;
+    sandbox.setUniform("tex_prev_frame","data/verportal_0615.png");
+    sandbox.setUniform("tex_prev_sobelH","data/verportal_0615-sobelH.png");
+    sandbox.setUniform("tex_prev_sobelV","data/verportal_0615-sobelV.png");
+    sandbox.setUniform("tex_curr_frame","data/verportal_0630.png");
+    sandbox.setUniform("tex_curr_sobelH","data/verportal_0630-sobelH.png");
+    sandbox.setUniform("tex_curr_sobelV","data/verportal_0630-sobelV.png");
+
+    sandbox.load(fragShader);
+
+   </script>
+
+ </body>
+</html>

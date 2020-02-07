@@ -1,0 +1,26 @@
+{
+  "name": "shady",
+  "version": "1.0.0",
+  "description": "Shadertest",
+  "main": "index.js",
+  "scripts": {
+    "dev": "buddy watch --reload --serve"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "buddy": "^6.6.2",
+    "buddy-server": "^2.0.2",
+    "glslCanvas": "0.0.17"
+  },
+  "buddy": {
+    "build": [
+      {
+        "input": "*.html"
+      }
+    ],
+    "server": {
+      "directory": "."
+    }
+  }
+}

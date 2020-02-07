@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Shader Test</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1"
+    />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <script
+      type="text/javascript"
+      src="./node_modules/glslCanvas/build/GlslCanvas.js"
+    ></script>
+  </head>
+  <body style="margin:0;padding:0;overflow:hidden;">
+    <script id="vertexShader" type="x-shader/x-vertex">
+      attribute vec4 a_position;
+      void main(){
+        gl_Position = a_position;
+      }
+    </script>
+    <script id="fragmentShader" type="x-shader/x-fragment">
+      #ifdef GL_ES
+      precision mediump float;
+      precision mediump int;
+      #endif
+
+      uniform vec2 u_mouse;
+      uniform float u_time;
+      uniform vec2 u_resolution;
+      uniform sampler2D	tex_z1_1; // current  image
+      uniform sampler2D	tex_z2_1; // next image
+      uniform sampler2D tex_flow_1; // flow texture
+
+      uniform sampler2D	tex_z1_2; // current  image
+      uniform sampler2D	tex_z2_2; // next image
+      uniform sampler2D tex_flow_2; // flow texture
+
+      uniform sampler2D	tex_z1_3; // current  image
+      uniform sampler2D	tex_z2_3; // next image
+      uniform sampler2D tex_flow_3; // flow texture
+
+      uniform sampler2D	tex_z1_4; // current  image
+      uniform sampler2D	tex_z2_4; // next image
+      uniform sampler2D tex_flow_4; // flow texture
+
+      void main() {
+        float time = abs(fract(u_time / (4.))); // linear 0 - 1
+        vec2 xy = gl_FragCoord.xy / u_resolution.xy;
+        //float mask = texture2D(tex_z1_1, xy).a;
+        float factor = 255. / 7.;
+        float interpol;
+
+        vec2 fwd, rev;
+        vec4 zforward, zbackward, blend;
+        if (time < 0.25) {
+          interpol = time * 4.;
+          fwd = ((texture2D(tex_flow_1, xy).gr) - 0.5 ) / factor;
+          rev = ((texture2D(tex_flow_1, xy).ab) - 0.5 ) / factor;
+          vec2 twisterpol = vec2(interpol, -interpol);
+          vec2 twisterpolrev = vec2(1. - interpol, -1. + interpol);
+          zforward = texture2D(tex_z1_1, xy - fwd * twisterpol);
+          zbackward = texture2D(tex_z2_1, xy - rev * twisterpolrev);
+          blend = mix(zforward / 2., zbackward / 2., interpol) * 2.;
+        }
+        else if (time < 0.5) {
+          interpol = (time - 0.25) * 4.;
+          fwd = ((texture2D(tex_flow_2, xy).gr) - 0.5 ) / factor;
+          rev = ((texture2D(tex_flow_2, xy).ab) - 0.5 ) / factor;
+          vec2 twisterpol = vec2(interpol, -interpol);
+          vec2 twisterpolrev = vec2(1. - interpol, -1. + interpol);
+          zforward = texture2D(tex_z1_2, xy - fwd * twisterpol);
+          zbackward = texture2D(tex_z2_2, xy - rev * twisterpolrev);
+          blend = mix(zforward / 2., zbackward / 2., interpol) * 2.;
+        }
+        else if (time < 0.75) {
+          interpol = (time - 0.5) * 4.;
+          fwd = ((texture2D(tex_flow_3, xy).gr) - 0.5 ) / factor;
+          rev = ((texture2D(tex_flow_3, xy).ab) - 0.5 ) / factor;
+          vec2 twisterpol = vec2(interpol, -interpol);
+          vec2 twisterpolrev = vec2(1. - interpol, -1. + interpol);
+          zforward = texture2D(tex_z1_3, xy - fwd * twisterpol);
+          zbackward = texture2D(tex_z2_3, xy - rev * twisterpolrev);
+          blend = mix(zforward / 2., zbackward / 2., interpol) * 2.;
+        }
+        else if (time < 1.) {
+          interpol = (time - 0.75) * 4.;
+          fwd = ((texture2D(tex_flow_4, xy).gr) - 0.5 ) / factor;
+          rev = ((texture2D(tex_flow_4, xy).ab) - 0.5 ) / factor;
+          vec2 twisterpol = vec2(interpol, -interpol);
+          vec2 twisterpolrev = vec2(1. - interpol, -1. + interpol);
+          zforward = texture2D(tex_z1_4, xy - fwd * twisterpol);
+          zbackward = texture2D(tex_z2_4, xy - rev * twisterpolrev);
+          blend = mix(zforward / 2., zbackward / 2., interpol) * 2.;
+        }
+
+        if (blend.a < 1.) {
+          gl_FragColor = vec4(1.,1.,1.,1.);
+        } else {
+          gl_FragColor = vec4(blend.rgb, 1);
+        }
+      }
+    </script>
+    <canvas id="glslCanvas" width="675" height="621"></canvas>
+    <script>
+      var canvas = document.getElementById("glslCanvas");
+      //canvas.style.height = "100%";
+      //canvas.style.width = "100%";
+      var sandbox = new GlslCanvas(canvas);
+
+      var fragShader = document.getElementById("fragmentShader").innerHTML;
+      var vertShader = document.getElementById("vertexShader").innerHTML;
+      sandbox.setUniform("tex_z1_1", "./data/displacement/1.nc/frame0.png");
+      sandbox.setUniform("tex_z2_1", "./data/displacement/1.nc/frame15.png");
+      sandbox.setUniform(
+        "tex_flow_1",
+        "./data/displacement/1.nc/fwd_rev_uv.png"
+      );
+
+      sandbox.setUniform("tex_z1_2", "./data/displacement/2.nc/frame0.png");
+      sandbox.setUniform("tex_z2_2", "./data/displacement/2.nc/frame15.png");
+      sandbox.setUniform(
+        "tex_flow_2",
+        "./data/displacement/2.nc/fwd_rev_uv.png"
+      );
+
+      sandbox.setUniform("tex_z1_3", "./data/displacement/3.nc/frame0.png");
+      sandbox.setUniform("tex_z2_3", "./data/displacement/3.nc/frame15.png");
+      sandbox.setUniform(
+        "tex_flow_3",
+        "./data/displacement/3.nc/fwd_rev_uv.png"
+      );
+
+      sandbox.setUniform("tex_z1_4", "./data/displacement/4.nc/frame0.png");
+      sandbox.setUniform("tex_z2_4", "./data/displacement/4.nc/frame15.png");
+      sandbox.setUniform(
+        "tex_flow_4",
+        "./data/displacement/4.nc/fwd_rev_uv.png"
+      );
+
+      sandbox.load(fragShader);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Layer Clipping with WebGL</title>
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1"
+    />
+
+    <link rel="stylesheet" href="./lib/ol/ol.css" type="text/css" />
+    <!--
+      The line below is only needed for old environments like Internet Explorer and Android 4.x
+    -->
+    <script src="./lib/ol/ol-debug.js"></script>
+    <script src="./lib/webgl-utils.js"></script>
+    <script
+      type="text/javascript"
+      src="./node_modules/glslCanvas/build/GlslCanvas.js"
+    ></script>
+  </head>
+  <body style="margin:0;padding:0;overflow:hidden;">
+    <!-- vertex shader -->
+    <script id="vertexShader" type="x-shader/x-vertex">
+      attribute vec4 a_position;
+        void main(){
+          gl_Position = a_position;
+      }
+    </script>
+    <!-- fragment shader -->
+    <script id="fragmentShader" type="x-shader/x-fragment">
+      #ifdef GL_ES
+      precision mediump float;
+      precision mediump int;
+      #endif
+
+      uniform vec2 u_mouse;
+      uniform float u_time;
+      uniform vec2 u_resolution;
+      uniform sampler2D	tex_z1_1; // current  image
+      uniform sampler2D	tex_z2_1; // next image
+      uniform sampler2D tex_flow_1; // flow texture
+
+      uniform sampler2D	tex_z1_2; // current  image
+      uniform sampler2D	tex_z2_2; // next image
+      uniform sampler2D tex_flow_2; // flow texture
+
+      uniform sampler2D	tex_z1_3; // current  image
+      uniform sampler2D	tex_z2_3; // next image
+      uniform sampler2D tex_flow_3; // flow texture
+
+      uniform sampler2D	tex_z1_4; // current  image
+      uniform sampler2D	tex_z2_4; // next image
+      uniform sampler2D tex_flow_4; // flow texture
+
+      void main() {
+        float time = abs(fract(u_time / (4.))); // linear 0 - 1
+        vec2 xy = gl_FragCoord.xy / u_resolution.xy;
+        float mask = texture2D(tex_z1_1, xy).a;
+        float factor = 255. / 7.;
+        float interpol;
+
+        vec2 fwd, rev;
+        vec4 zforward, zbackward, blend;
+        if (time < 0.25) {
+          interpol = time * 4.;
+          fwd = ((texture2D(tex_flow_1, xy).gr) - 0.5 ) / factor;
+          rev = ((texture2D(tex_flow_1, xy).ab) - 0.5 ) / factor;
+          vec2 twisterpol = vec2(interpol, -interpol);
+          vec2 twisterpolrev = vec2(1. - interpol, -1. + interpol);
+          zforward = texture2D(tex_z1_1, xy - fwd * twisterpol);
+          zbackward = texture2D(tex_z2_1, xy - rev * twisterpolrev);
+          blend = mix(zforward / 2., zbackward / 2., interpol) * 2.;
+        }
+        else if (time < 0.5) {
+          interpol = (time - 0.25) * 4.;
+          fwd = ((texture2D(tex_flow_2, xy).gr) - 0.5 ) / factor;
+          rev = ((texture2D(tex_flow_2, xy).ab) - 0.5 ) / factor;
+          vec2 twisterpol = vec2(interpol, -interpol);
+          vec2 twisterpolrev = vec2(1. - interpol, -1. + interpol);
+          zforward = texture2D(tex_z1_2, xy - fwd * twisterpol);
+          zbackward = texture2D(tex_z2_2, xy - rev * twisterpolrev);
+          blend = mix(zforward / 2., zbackward / 2., interpol) * 2.;
+        }
+        else if (time < 0.75) {
+          interpol = (time - 0.5) * 4.;
+          fwd = ((texture2D(tex_flow_3, xy).gr) - 0.5 ) / factor;
+          rev = ((texture2D(tex_flow_3, xy).ab) - 0.5 ) / factor;
+          vec2 twisterpol = vec2(interpol, -interpol);
+          vec2 twisterpolrev = vec2(1. - interpol, -1. + interpol);
+          zforward = texture2D(tex_z1_3, xy - fwd * twisterpol);
+          zbackward = texture2D(tex_z2_3, xy - rev * twisterpolrev);
+          blend = mix(zforward / 2., zbackward / 2., interpol) * 2.;
+        }
+        else if (time < 1.) {
+          interpol = (time - 0.75) * 4.;
+          fwd = ((texture2D(tex_flow_4, xy).gr) - 0.5 ) / factor;
+          rev = ((texture2D(tex_flow_4, xy).ab) - 0.5 ) / factor;
+          vec2 twisterpol = vec2(interpol, -interpol);
+          vec2 twisterpolrev = vec2(1. - interpol, -1. + interpol);
+          zforward = texture2D(tex_z1_4, xy - fwd * twisterpol);
+          zbackward = texture2D(tex_z2_4, xy - rev * twisterpolrev);
+          blend = mix(zforward / 2., zbackward / 2., interpol) * 2.;
+        }
+
+        if (blend.a < 1.0 || blend.b > 240. / 255.) {
+          gl_FragColor = vec4(0.,0.,0.,0.);
+        } else {
+          gl_FragColor = vec4(blend.rgb, mask);
+        }
+      }
+    </script>
+    <div id="map" class="map"></div>
+    <div id="no-webgl" class="alert alert-danger" style="display: none">
+      This example requires a browser that supports
+      <a href="http://get.webgl.org/">WebGL</a>.
+    </div>
+    <script>
+      if (!ol.has.WEBGL) {
+        var info = document.getElementById("no-webgl");
+        /**
+         * display error message
+         */
+        info.style.display = "";
+      } else {
+        var osm = new ol.layer.Tile({
+          source: new ol.source.OSM()
+        });
+
+        const baseSource = new ol.source.XYZ({
+          url:
+            "https://{a-c}-kartcache.nrk.no/tiles/yr_basemap_mercator/{z}/{x}/{y}.jpg"
+        });
+
+        const outlineSource = new ol.source.XYZ({
+          url:
+            "https://{a-c}-kartcache.nrk.no/tiles/yr_basemap_overlay_mercator/{z}/{x}/{y}.png"
+        });
+
+        const baseLayer = new ol.layer.Tile({
+          source: baseSource
+        });
+
+        const outlineLayer = new ol.layer.Tile({
+          source: outlineSource
+        });
+
+        var map = new ol.Map({
+          layers: [baseLayer, outlineLayer],
+          renderer: /** @type {ol.renderer.Type} */ ("canvas"),
+          target: "map",
+          controls: ol.control.defaults({
+            attributionOptions: /** @type {olx.control.AttributionOptions} */ ({
+              collapsible: false
+            })
+          }),
+          view: new ol.View({
+            center: [0, 0],
+            zoom: 2
+          })
+        });
+
+        var canv = document.createElement("canvas");
+        canv.id = "glcanvas";
+        canv.style.display = "block";
+        canv.style.position = "absolute";
+
+        //document.body.appendChild(canv); // adds the canvas to the body element
+        map.getViewport().appendChild(canv); // adds the canvas to #someBox
+
+        var sandbox = new GlslCanvas(canv);
+        canv.globalCompositeOperation = "destination-out";
+        var fragShader = document.getElementById("fragmentShader").innerHTML;
+        var vertShader = document.getElementById("vertexShader").innerHTML;
+        sandbox.setUniform("tex_z1_1", "./data/displacement/1.nc/frame0.png");
+        sandbox.setUniform("tex_z2_1", "./data/displacement/1.nc/frame15.png");
+        sandbox.setUniform(
+          "tex_flow_1",
+          "./data/displacement/1.nc/fwd_rev_uv.png"
+        );
+
+        sandbox.setUniform("tex_z1_2", "./data/displacement/2.nc/frame0.png");
+        sandbox.setUniform("tex_z2_2", "./data/displacement/2.nc/frame15.png");
+        sandbox.setUniform(
+          "tex_flow_2",
+          "./data/displacement/2.nc/fwd_rev_uv.png"
+        );
+
+        sandbox.setUniform("tex_z1_3", "./data/displacement/3.nc/frame0.png");
+        sandbox.setUniform("tex_z2_3", "./data/displacement/3.nc/frame15.png");
+        sandbox.setUniform(
+          "tex_flow_3",
+          "./data/displacement/3.nc/fwd_rev_uv.png"
+        );
+
+        sandbox.setUniform("tex_z1_4", "./data/displacement/4.nc/frame0.png");
+        sandbox.setUniform("tex_z2_4", "./data/displacement/4.nc/frame15.png");
+        sandbox.setUniform(
+          "tex_flow_4",
+          "./data/displacement/4.nc/fwd_rev_uv.png"
+        );
+
+        sandbox.load(fragShader);
+
+        baseLayer.on("precompose", function(event) {
+          //var lonLat = [10, 59];
+          //var webMercator = ol.proj.fromLonLat(lonLat);
+          var webMercator = [1333800, 10031134];
+          var ll = map.getPixelFromCoordinate([
+            webMercator[0] - 1000000,
+            webMercator[1] - 1000000
+          ]);
+          var view = map.getView();
+          var width =
+            ol.extent.getWidth(view.getProjection().getExtent()) /
+            view.getResolution();
+          var llX = ll[0];
+          var llY = ll[1];
+
+          var ur = map.getPixelFromCoordinate([
+            webMercator[0] + 1000000,
+            webMercator[1] + 1000000
+          ]);
+          var view = map.getView();
+          var width =
+            ol.extent.getWidth(view.getProjection().getExtent()) /
+            view.getResolution();
+          var urX = ur[0];
+          var urY = ur[1];
+
+          var width = Math.abs(urX - llX);
+          var height = Math.abs(llY - urY);
+          canv.style.top = urY + "px";
+          canv.style.left = llX + "px";
+          canv.style.width = width + "px";
+          canv.style.height = height + "px";
+          canv.width = width;
+          canv.height = height;
+        });
+      }
+    </script>
+  </body>
+</html>

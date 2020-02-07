@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Canvas</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+	#radar { border: 1px solid black; }
+	</style>
+</head>
+<body>
+	<canvas id="radar" width="825" height="1115"></canvas>
+	<script>
+
+		var canvas = document.getElementById('radar'),
+			context = canvas.getContext('2d'),
+			width = 825,
+			height = 1115,
+			count = 0,
+			image = new Image();
+
+		image.onload = function() {
+			setInterval(function() {
+				drawImage(count);
+				if (++count === 42) {
+					count = 0;
+				}
+			}, 500);
+		};
+
+		function drawImage (frame) {
+			var xPos = frame % 7,
+				yPos = Math.floor(frame / 7),
+				sx = -xPos * width,
+				sy = -yPos * height; 
+
+			context.clearRect(0, 0, width, height);
+			context.drawImage(image, sx, sy); 
+		}
+
+		image.src = 'images/combined/2014-10-28T20-45Z.png';
+
+	</script>
+</body>
+</html>

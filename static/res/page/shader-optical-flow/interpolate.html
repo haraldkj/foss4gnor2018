@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <title>Shader Test</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1">
+  <link rel="icon" type="image/png" href="favicon.png"/>
+  <script type="text/javascript" src="./node_modules/glslCanvas/build/GlslCanvas.js"></script>
+ </head>
+ <body style="margin:0;padding:0;overflow:hidden;">
+   <script id="vertexShader" type="x-shader/x-vertex">
+    attribute vec4 a_position;
+    void main(){
+      gl_Position = a_position;
+    }
+   </script>
+   <script id="fragmentShader" type="x-shader/x-fragment">
+    #ifdef GL_ES
+    precision mediump float;
+    precision mediump int;
+    #endif
+
+    uniform vec2 u_mouse;
+    uniform float u_time;
+    uniform vec2 u_resolution;
+    uniform sampler2D	tex_curr_frame; // current  image
+    uniform sampler2D	tex_prev_frame; // previous image
+    uniform sampler2D tex_flow; // flow texture
+
+    void main() {
+      vec2 posn = gl_FragCoord.xy / u_resolution.xy;
+
+      vec2 flow = texture2D(tex_flow, posn).rg * 2.0 - 0.5;
+
+      gl_FragColor = vec4(flow * 0.5 + 0.5, sin(u_time) * 0.5 + 0.5, 1.0);
+    }
+
+   </script>
+   <canvas id="glslCanvas" width="1270" height="1614"></canvas>
+   <script>
+    var canvas = document.getElementById("glslCanvas");
+    canvas.style.height = "100%";
+    //canvas.style.width = "100%";
+    var sandbox = new GlslCanvas(canvas);
+
+    var fragShader=document.getElementById('fragmentShader').innerHTML;
+    var vertShader=document.getElementById('vertexShader').innerHTML;
+    sandbox.setUniform("tex_prev_frame","data/verportal_0615.png");
+    sandbox.setUniform("tex_curr_frame","data/verportal_0630.png");
+    sandbox.setUniform("tex_flow","data/flow_0615-0630.png");
+
+    sandbox.load(fragShader);
+
+   </script>
+
+ </body>
+</html>

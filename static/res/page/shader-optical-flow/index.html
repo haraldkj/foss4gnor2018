@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <title>Shader Test</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1">
+  <link rel="icon" type="image/png" href="favicon.png"/>
+  <script type="text/javascript" src="./node_modules/glslCanvas/build/GlslCanvas.js"></script>
+ </head>
+ <body style="margin:0;padding:0;overflow:hidden;">
+   <script id="vertexShader" type="x-shader/x-vertex">
+    attribute vec4 a_position;
+    void main(){
+      gl_Position = a_position;
+    }
+   </script>
+   <script id="fragmentShader" type="x-shader/x-fragment">
+     #ifdef GL_ES
+     precision mediump float;
+     #endif
+     uniform vec2 u_mouse;
+     uniform vec2 u_resolution;
+     uniform sampler2D u_texture1;
+     uniform vec2 u_texture1Resolution;
+     uniform sampler2D u_texture2;
+     uniform vec2 u_texture2Resolution;
+
+      void main() {
+        vec2 st = gl_FragCoord.xy / u_resolution.xy;
+        vec2	off_x = vec2(1.0 / u_resolution.x, 0.0);
+				vec2	off_y = vec2(0.0, 1.0 / u_resolution.y);
+        float lambda = 0.0001;
+        float inverseX = -1.0;
+        float inverseY = -1.0;
+        float force = 0.2;
+        //vec4 color = vec4(texture2D(u_texture1,st).rgb,1.0);
+        // get the difference
+        vec4 scr_dif = texture2D(u_texture2, st) - texture2D(u_texture1, st);
+
+        //calculate the gradient
+			  vec4 gradx; vec4 grady; vec4 gradmag; vec4 vx; vec4 vy;
+			  gradx =  texture2D(u_texture1, st + off_x) - texture2D(u_texture1, st - off_x);
+			  gradx += texture2D(u_texture2, st + off_x) - texture2D(u_texture2, st - off_x);
+			  grady =  texture2D(u_texture1, st + off_y) - texture2D(u_texture1, st - off_y);
+			  grady += texture2D(u_texture2, st + off_y) - texture2D(u_texture2, st - off_y);
+
+        gradmag = sqrt((gradx*gradx)+(grady*grady)+vec4(lambda));
+			  vx = scr_dif*(gradx/gradmag);
+			  vy = scr_dif*(grady/gradmag);
+
+        vec2	flow = vec2(0.0);
+			  flow.x = -(vx.x + vx.y + vx.z) / 3.0 * inverseX;
+			  flow.y = -(vy.x + vy.y + vy.z) / 3.0 * inverseY;
+
+        // apply force
+			  //flow *= vec2(force);
+
+			  // set color
+        if(u_mouse.x > 400.0 || u_mouse.x == 0.) {
+          gl_FragColor = vec4(flow, 0.0, 1.0);
+          //vec4 dst = vec4(flow, texture2D(u_texture2,st).b, 1.0);
+          //gl_FragColor = dst;
+        }
+        else if(u_mouse.x > 300.0){
+          gl_FragColor = vx;
+        }
+        else if(u_mouse.x > 200.0){
+          gl_FragColor = vy;
+        }
+        else if(u_mouse.x > 100.0){
+          gl_FragColor = vec4(texture2D(u_texture2,st).rgb,1.0);
+        }
+        else {
+          gl_FragColor = vec4(texture2D(u_texture1,st).rgb,1.0);
+        }
+
+        //gl_FragColor = vec4(u_mouse / u_resolution,gl_FragCoord.y / 1000.0,1.0);
+      }
+   </script>
+   <canvas id="glslCanvas" width="1270" height="1614"></canvas>
+   <script>
+    var canvas = document.getElementById("glslCanvas");
+    canvas.style.height = "100%";
+    //canvas.style.width = "100%";
+    var sandbox = new GlslCanvas(canvas);
+
+    var fragShader=document.getElementById('fragmentShader').innerHTML;
+    var vertShader=document.getElementById('vertexShader').innerHTML;
+    sandbox.setUniform("u_texture1","data/verportal_0615.png");
+    sandbox.setUniform("u_texture2","data/verportal_0630.png");
+
+    sandbox.load(fragShader);
+
+   </script>
+
+ </body>
+</html>

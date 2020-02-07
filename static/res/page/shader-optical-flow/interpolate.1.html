@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Shader Test</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1"
+    />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <script
+      type="text/javascript"
+      src="./node_modules/glslCanvas/build/GlslCanvas.js"
+    ></script>
+  </head>
+  <body style="margin:0;padding:0;overflow:hidden;">
+    <script id="vertexShader" type="x-shader/x-vertex">
+      attribute vec4 a_position;
+      void main(){
+        gl_Position = a_position;
+      }
+    </script>
+    <script id="fragmentShader" type="x-shader/x-fragment">
+      #ifdef GL_ES
+      precision mediump float;
+      precision mediump int;
+      #endif
+
+      uniform vec2 u_mouse;
+      uniform float u_time;
+      uniform vec2 u_resolution;
+      uniform sampler2D	tex_z1; // current  image
+      uniform sampler2D	tex_z2; // next image
+      uniform sampler2D tex_flow; // flow texture
+
+      void main() {
+        float interpol = abs(fract(u_time / (2.))); // linear 0 - 1
+        vec2 xy = gl_FragCoord.xy / u_resolution.xy;
+        float mask = texture2D(tex_z1, xy).a;
+        float factor = 255. / 7.;
+        vec2 fwd = ((texture2D(tex_flow, xy).gr) - 0.5 ) / factor;
+        vec2 rev = ((texture2D(tex_flow, xy).ab) - 0.5 ) / factor;
+        vec2 twisterpol = vec2(interpol, -interpol);
+        vec2 twisterpolrev = vec2(1. - interpol, -1. + interpol);
+        vec4 zforward = texture2D(tex_z1, xy - fwd * twisterpol);
+        vec4 zbackward = texture2D(tex_z2, xy - rev * twisterpolrev);
+        vec4 blend = mix(zforward / 2., zbackward / 2., interpol) * 2.;
+        gl_FragColor = vec4(blend.rgb, mask);
+      }
+    </script>
+    <canvas id="glslCanvas" width="675" height="621"></canvas>
+    <script>
+      var canvas = document.getElementById("glslCanvas");
+      //canvas.style.height = "100%";
+      //canvas.style.width = "100%";
+      var sandbox = new GlslCanvas(canvas);
+
+      var fragShader = document.getElementById("fragmentShader").innerHTML;
+      var vertShader = document.getElementById("vertexShader").innerHTML;
+      sandbox.setUniform("tex_z1", "./data/displacement/4.nc/frame0.png");
+      sandbox.setUniform("tex_z2", "./data/displacement/4.nc/frame15.png");
+      sandbox.setUniform("tex_flow", "./data/displacement/4.nc/fwd_rev_uv.png");
+
+      sandbox.load(fragShader);
+    </script>
+  </body>
+</html>

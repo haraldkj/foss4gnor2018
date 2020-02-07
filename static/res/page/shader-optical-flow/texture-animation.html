@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <title>Shader Test</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1">
+  <link rel="icon" type="image/png" href="favicon.png"/>
+  <script type="text/javascript" src="./node_modules/glslCanvas/build/GlslCanvas.js"></script>
+ </head>
+ <body style="margin:0;padding:0;overflow:hidden;">
+   <script id="vertexShader" type="x-shader/x-vertex">
+    attribute vec4 a_position;
+    void main(){
+      gl_Position = a_position;
+    }
+   </script>
+   <script id="fragmentShader" type="x-shader/x-fragment">
+     #ifdef GL_ES
+     precision mediump float;
+     #endif
+     uniform vec2 u_mouse;
+     uniform float maximum;
+     uniform float u_time;
+     uniform vec2 u_resolution;
+     uniform sampler2D u_texture1;
+     uniform vec2 u_texture1Resolution;
+     uniform sampler2D u_texture2;
+     uniform vec2 u_texture2Resolution;
+     uniform sampler2D u_displacement;
+
+      void main() {
+        vec2 st = gl_FragCoord.xy / u_resolution.xy;
+
+        float time_e = u_time * 0.00001;
+
+        vec2 uv_t = vec2(st.s + time_e, st.t + time_e);
+        vec4 displace = texture2D(u_displacement, uv_t);
+
+        float displace_k = displace.r * maximum;
+
+        vec2 uv_displaced = vec2(gl_FragCoord.x + displace_k, gl_FragCoord.y + displace_k);
+
+			  // set color
+        if(u_mouse.x > 400.0 || u_mouse.x == 0.) {
+          gl_FragColor = vec4(texture2D(u_texture1, uv_displaced).rgb, 1.0);
+        }
+        else if(u_mouse.x > 300.0){
+          gl_FragColor = vec4(texture2D(u_texture1, uv_displaced).rgb, 1.0);
+        }
+        else if(u_mouse.x > 200.0){
+          gl_FragColor = vec4(texture2D(u_displacement,st).rgb,1.0);
+        }
+        else if(u_mouse.x > 100.0){
+          gl_FragColor = vec4(texture2D(u_texture2,st).rgb,1.0);
+        }
+        else {
+          gl_FragColor = vec4(texture2D(u_texture1,st).rgb,1.0);
+        }
+      }
+   </script>
+   <canvas id="glslCanvas" width="1270" height="1614"></canvas>
+   <script>
+    var canvas = document.getElementById("glslCanvas");
+    canvas.style.height = "100%";
+    //canvas.style.width = "100%";
+    var sandbox = new GlslCanvas(canvas);
+
+    var fragShader=document.getElementById('fragmentShader').innerHTML;
+    var vertShader=document.getElementById('vertexShader').innerHTML;
+    sandbox.setUniform("u_texture1","data/displacement/frame0.png");
+    sandbox.setUniform("u_displacement", "data/displacement/uv.png")
+    sandbox.setUniform("u_texture2","data/displacement/frame15.png");
+
+    sandbox.load(fragShader);
+
+   </script>
+
+ </body>
+</html>
